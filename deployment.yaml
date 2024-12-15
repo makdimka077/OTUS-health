@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: otus-deployment
+spec:
+    replicas: 2
+    selector:
+       matchLabels:
+          app: otus-health
+    template:
+       metadata:
+          labels:
+             app: otus-health
+       spec:
+          containers:
+          - name: otus-health
+            image: makdimka077/otus-health:v2
+            ports:
+              - name: web 
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
