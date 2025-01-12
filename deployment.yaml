@@ -14,7 +14,12 @@ spec:
        spec:
           containers:
           - name: otus-health
-            image: makdimka077/otus-health:v2
+            image: makdimka077/otus-health:v3
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
             ports:
               - name: web 
                 containerPort: 8080

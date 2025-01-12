@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otus-app
+data:
+  spring.datasource.url: jdbc:postgresql://dev-pg-postgresql:5432/postgres
+  SPRING_DATASOURCE_URL: jdbc:postgresql://dev-pg-postgresql:5432/postgres
