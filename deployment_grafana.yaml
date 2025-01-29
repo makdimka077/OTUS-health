@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: grafana-deployment
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: grafana
+    template:
+       metadata:
+          labels:
+             app: grafana
+       spec:
+          containers:
+          - name: grafanna
+            image:  grafana/grafana:main
+            ports:
+              - name: http-grafana
+                containerPort: 3000
+            env:
+              - name: GF_SECURITY_ADMIN_USER
+                value: admin
+              - name: GF_SECURITY_ADMIN_PASSWORD
+                value: admin
+            volumeMounts:
+              - mountPath: /var/lib/grafana
+                name: grafana-pv
+          volumes:
+            - name: grafana-pv
+              persistentVolumeClaim:
+                claimName: grafana-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: http-grafana
+  selector:
+    app: grafana
+  sessionAffinity: None
+  type: ClusterIP
+

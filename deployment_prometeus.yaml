@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: prometeus-deployment
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: prometeus
+    template:
+       metadata:
+          labels:
+             app: prometeus
+       spec:
+          containers:
+          - name: prometeus
+            image:  prom/prometheus
+            volumeMounts:
+              - name: config-volume
+                mountPath: /etc/prometheus/prometheus.yml
+                subPath: prometheus.yml
+            ports:
+              - name: prometeus-port
+                containerPort: 9090
+          volumes:
+            - name: config-volume
+              configMap:
+                name:  prometeus-config
+                # optional: true # mark the source ConfigMap as optional
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometeus
+spec:
+  ports:
+    - port: 9090
+      protocol: TCP
+      targetPort: prometeus-port
+  selector:
+    app: prometeus
+  sessionAffinity: None
+  type: ClusterIP
