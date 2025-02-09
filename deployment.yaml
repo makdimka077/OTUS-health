@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
     name: otus-deployment
 spec:
-    replicas: 2
+    replicas: 1
     selector:
        matchLabels:
           app: otus-health
@@ -14,7 +14,7 @@ spec:
        spec:
           containers:
           - name: otus-health
-            image: makdimka077/otus-health:v4
+            image: makdimka077/otus-health:v8
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -33,3 +33,40 @@ spec:
                 port: 8080
               initialDelaySeconds: 60
               periodSeconds: 20
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: otus-auth-service
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: auth-service
+    template:
+       metadata:
+          labels:
+             app: auth-service
+       spec:
+          containers:
+          - name: auth-service
+            image: makdimka077/otus-auth-service:v4
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
+            ports:
+              - name: web
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
+

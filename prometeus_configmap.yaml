@@ -15,6 +15,11 @@ data:
         metrics_path: '/actuator/prometheus'
         static_configs:
           - targets: ['otus-health:8080']
+      - job_name: 'auth-service'
+        scrape_interval: 5s
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['auth-service:8080']
       - job_name: 'ingress'
         scrape_interval: 5s
         metrics_path: '/metrics'
