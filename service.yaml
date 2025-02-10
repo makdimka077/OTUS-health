@@ -23,4 +23,43 @@ spec:
       port: 8080
       targetPort: web
   type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scoring
+spec:
+  selector:
+    app: scoring
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comm-gate
+spec:
+  selector:
+    app: comm-gate
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-core
+spec:
+  selector:
+    app: orders-core
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
 

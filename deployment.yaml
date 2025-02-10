@@ -14,7 +14,7 @@ spec:
        spec:
           containers:
           - name: otus-health
-            image: makdimka077/otus-health:v8
+            image: makdimka077/otus-health:v9
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -50,7 +50,116 @@ spec:
        spec:
           containers:
           - name: auth-service
-            image: makdimka077/otus-auth-service:v4
+            image: makdimka077/otus-auth-service:v5
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
+            ports:
+              - name: web
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: otus-scoring
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: scoring
+    template:
+       metadata:
+          labels:
+             app: scoring
+       spec:
+          containers:
+          - name: scoring
+            image: makdimka077/otus-scoring:v1
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
+            ports:
+              - name: web
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: comm-gate
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: comm-gate
+    template:
+       metadata:
+          labels:
+             app: comm-gate
+       spec:
+          containers:
+          - name: comm-gate
+            image: makdimka077/otus-comm-gate:v1
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
+            ports:
+              - name: web
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: orders-core
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: orders-core
+    template:
+       metadata:
+          labels:
+             app: orders-core
+       spec:
+          containers:
+          - name: orders-core
+            image: makdimka077/otus-orders-core:v1
             envFrom:
             - configMapRef:
                 name: otus-app

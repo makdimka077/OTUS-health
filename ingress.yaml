@@ -24,3 +24,18 @@ spec:
               name: auth-service
               port:
                 number: 8080
+        - path: /comm-gate(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: comm-gate
+              port:
+                number: 8080
+        - path: /orders-core(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: orders-core
+              port:
+                number: 8080
+
