@@ -63,3 +63,17 @@ spec:
       targetPort: web
   type: NodePort
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: saga-core
+spec:
+  selector:
+    app: saga-core
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: web
+  type: NodePort
+

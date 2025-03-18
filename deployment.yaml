@@ -14,7 +14,7 @@ spec:
        spec:
           containers:
           - name: otus-health
-            image: makdimka077/otus-health:v9
+            image: makdimka077/otus-health:v10
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -86,7 +86,7 @@ spec:
        spec:
           containers:
           - name: scoring
-            image: makdimka077/otus-scoring:v1
+            image: makdimka077/otus-scoring:v2
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -122,7 +122,7 @@ spec:
        spec:
           containers:
           - name: comm-gate
-            image: makdimka077/otus-comm-gate:v1
+            image: makdimka077/otus-comm-gate:v2
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -159,7 +159,7 @@ spec:
        spec:
           containers:
           - name: orders-core
-            image: makdimka077/otus-orders-core:v1
+            image: makdimka077/otus-orders-core:v2
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -179,3 +179,39 @@ spec:
               initialDelaySeconds: 60
               periodSeconds: 20
 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: saga-core
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: saga-core
+    template:
+       metadata:
+          labels:
+             app: saga-core
+       spec:
+          containers:
+          - name: orders-core
+            image: makdimka077/otus-saga-core:v1
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
+            ports:
+              - name: web
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
