@@ -122,7 +122,7 @@ spec:
        spec:
           containers:
           - name: comm-gate
-            image: makdimka077/otus-comm-gate:v2
+            image: makdimka077/otus-comm-gate:v5
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -159,7 +159,7 @@ spec:
        spec:
           containers:
           - name: orders-core
-            image: makdimka077/otus-orders-core:v2
+            image: makdimka077/otus-orders-core:v4
             envFrom:
             - configMapRef:
                 name: otus-app
@@ -215,3 +215,40 @@ spec:
                 port: 8080
               initialDelaySeconds: 60
               periodSeconds: 20
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: document-generator
+spec:
+    replicas: 1
+    selector:
+       matchLabels:
+          app: document-generator
+    template:
+       metadata:
+          labels:
+             app: document-generator
+       spec:
+          containers:
+          - name: document-generator
+            image: makdimka077/otus-document-generator:v4
+            envFrom:
+            - configMapRef:
+                name: otus-app
+            - secretRef:
+                name: mysecret
+            ports:
+              - name: web
+                containerPort: 8080
+            readinessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+            livenessProbe:
+              tcpSocket:
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 20
+

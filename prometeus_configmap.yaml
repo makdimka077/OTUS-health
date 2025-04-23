@@ -25,4 +25,29 @@ data:
         metrics_path: '/metrics'
         static_configs:
           - targets: ['nginx-ingress-nginx-controller-metrics.m.svc.cluster.local:10254']
+      - job_name: 'comm-gate-service'
+        scrape_interval: 5s
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['comm-gate:8080']
+      - job_name: 'document-genarator-service'
+        scrape_interval: 5s
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['document-generator:8080']
+      - job_name: 'orders-core-service'
+        scrape_interval: 5s
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['orders-core:8080']
+      - job_name: 'saga-core-service'
+        scrape_interval: 5s
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['saga-core:8080']
+      - job_name: 'scoring-service'
+        scrape_interval: 5s
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['scoring:8080']
 
